@@ -13,6 +13,7 @@ import {
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
+  Heading,
   Image,
 } from '@chakra-ui/react';
 import {Link} from "react-router-dom"
@@ -22,10 +23,13 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from '@chakra-ui/icons';
+import { useSelector } from 'react-redux';
 
 //This is nabBar component
 export default function NavBar() {
   const { isOpen, onToggle } = useDisclosure();
+
+  const signup = useSelector((state) => state.sign);
 
   return (
     // these all are designing
@@ -102,9 +106,26 @@ export default function NavBar() {
         </Flex>
 
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
+          <Link to="/details">
+          <Box display="flex">
+          <Image w="55px" src="https://media.istockphoto.com/vectors/about-help-info-information-properties-support-question-chat-bubble-vector-id1201139039?k=20&m=1201139039&s=612x612&w=0&h=zNGUREGarc2q93jLCjRRaZYuiSlLQShzQr4e2CY3y7Y="></Image>
+          <Text padding="5"
+            textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
+            fontFamily={'heading'}
+            color={useColorModeValue('gray.800', 'white')}>
+            USER 
+          </Text>
+          </Box>
+          </Link>
+          <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
+            <DesktopNav />
+          </Flex>
+        </Flex>
+
+        <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
           <Link to="/contact">
           <Box display="flex">
-          <Image w="50px" src="https://svgsilh.com/svg/304080.svg"></Image>
+          <Image w="38px" src="https://svgsilh.com/svg/304080.svg"></Image>
           <Text padding="5"
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
@@ -119,13 +140,15 @@ export default function NavBar() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
           <Link to="/create">
-          <Text display="flex" gap="10px"
+          <Box display="flex">
+          <Image w="50px" src="https://static.vecteezy.com/system/resources/previews/005/005/788/original/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"></Image>
+          <Heading padding="5" size="md"
             textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
             fontFamily={'heading'}
             color={useColorModeValue('gray.800', 'white')}>
-           <Image w="50px" src="https://cdn-icons-png.flaticon.com/512/13/13732.png"/>
-            CREATE ACCOUNT
-          </Text>
+            {signup.username}
+          </Heading>
+          </Box>
           </Link>
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav />

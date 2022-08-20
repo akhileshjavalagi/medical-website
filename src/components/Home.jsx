@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Grid, Box, GridItem,Input, Image, Heading, Text, Button } from '@chakra-ui/react'
 import NavBar from './NavBar';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 const Home = () => {
 
     const medicines = [
@@ -38,21 +42,49 @@ const Home = () => {
             name : "CALCIUM AND MINERALS"
         }
     ]
+
+    const [details, setDetails] = useState([]);
+
+    const signup = useSelector((state) => state.sign);
+
+    useEffect(()=>{
+
+        getData()
+    },[])
+    
+    const getData = async() => {
+        const res = await axios.get("https://masai-json-14.herokuapp.com/homeMedicines");
+        setDetails(res.data);
+    }
+
+    //console.log(signup)
+
     return (
         <>
         <NavBar/>
+
         <Box border="1px solid red" bg="#FBD38D" w="1200px" margin="center">
+        <Box>
+            <Heading>Our services</Heading>
+            <Box  display="flex" ml="380px">
+            <Heading size="sm" color="#D53F8C"> Order Medicines, </Heading>
+            <Heading size="sm" color="#D53F8C"> Flexible Delivery, </Heading>
+            <Heading size="sm" color="#D53F8C"> All Medicines available, </Heading>
+            </Box>
+        </Box>
+
         <Grid  templateColumns={{base:'repeat(2,70%)', md:'repeat(2, 48%)', lg:'repeat(4, 24%)'}}gap={4} p='3'>
              {
-               medicines.map((e)=>(
+               details.map((e)=>(
+                <Link to="/medicinedetails">
                 <Box boxShadow='2xl' p='6' rounded='md' bg='white'  w='250px' h="350px">
                   <Image w="100%" h="70%" src={e.image}></Image>
                   <Heading size="sm" mt="15px" noOfLines={2}>{e.name}</Heading>
                 </Box>
+                </Link>
                ))
              }
-             
-          </Grid>
+        </Grid>
         </Box>
         </>
     );

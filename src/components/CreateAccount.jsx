@@ -4,56 +4,67 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Checkbox,
     Stack,
     Button,
+    Image,
     Heading,
-    Text,
     useColorModeValue,
-    Textarea 
   } from '@chakra-ui/react';
-  import axios from 'axios';
   import React, { useState } from 'react';
-  
-  //here I used navigate to redirect to the homepage.
   import { useNavigate } from 'react-router'
-import NavBar from './NavBar';
+  import { useContext } from "react";
+  import { GameStateContext } from "../Context/Context";
+
+  //here I used navigate to redirect to the homepage.
+  import NavBar from './NavBar';
   
   export default function CreateAccount() {
     const navigate = useNavigate() //here I declared navigate function
-    
+   
     //here I took the object as the initial state of hook.
     const initalState = {
-      firstname : "",
-      lastname : "",
-      email : "",
-      dateOfBirth : "" ,
-      description : ""
-    }
+      tabletName : "",
+      priscriptions : "",
+    };
   
-    const [details, setDetails] = useState({});
-
     //here I initiated the state to the initialstate
     const [text, setText] = useState(initalState)
-    
+    const [showImage, setshowImage] = useState([]);
+
+    var { details, setDetails, image, setImage } = useContext(GameStateContext);
+
     //this is handle function to store the input value to the state
     const handleChange = (e) =>{
       const {id, value} = e.target
       setText({...text, [id] : value})
     }
 
-    const save = () =>{
-        setDetails(text);
-        console.log(details)
+    
 
+    const handleImage = (e) =>{
+      setshowImage([...showImage, URL.createObjectURL(e.target.files[0])])
     }
     
-   
-    
+    //console.log("show",showImage)
+  
+   const save = () =>{
+    if( text.tabletName.length==0 && text.priscriptions.length==0){
+      alert("please enter the details")
+    }else{
+       setDetails([...details, text]);
+       setImage([...image, showImage])
+       alert("Document uploaded succefully")
+       navigate("/home")
+    }
+  }
+
+  
+  console.log("context image",details)
+
     return (
     <>
     <NavBar/>
-    <Box border="1px solid red" w="1200px">
+    <Box  w="1200px">
       <Flex
         minH={'100vh'}
         align={'center'}
@@ -61,7 +72,7 @@ import NavBar from './NavBar';
         bg={useColorModeValue('gray.50', 'gray.800')}>
         <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
           <Stack align={'center'}>
-            <Heading color="#68D391" fontSize={'4xl'}>Register your account</Heading>
+            <Heading color="#68D391" fontSize={'4xl'}>Upload Your Documents</Heading>
           </Stack>
           <Box
             rounded={'lg'}
@@ -70,25 +81,20 @@ import NavBar from './NavBar';
             p={8}>
             <Stack spacing={4}>
               <FormControl>
-                <FormLabel>First Name</FormLabel>
-                <Input id="firstname" onChange={handleChange} />
+                <FormLabel>Tablet Name</FormLabel>
+                <Input id="tabletName" onChange={handleChange} />
               </FormControl>
+              
               <FormControl>
-                <FormLabel>Last Name</FormLabel>
-                <Input id="lastname" onChange={handleChange} />
+                <FormLabel>Priscription</FormLabel>
+                <Input id="priscriptions" onChange={handleChange} />
               </FormControl>
+              
               <FormControl>
-                <FormLabel>Enter Email</FormLabel>
-                <Input valid="email" onChange={handleChange}/>
+                <FormLabel>Upload Image</FormLabel>
+                <Input type="file" onChange={handleImage} />
               </FormControl>
-              <FormControl >
-                <FormLabel>Date of birth</FormLabel>
-                <Input id="dateOfBirth" type="date" onChange={handleChange}/>
-              </FormControl>
-              <FormControl>
-                <FormLabel>Short Description about your self</FormLabel>
-                <Textarea id="description" onChange={handleChange} />
-              </FormControl>
+
               <Stack spacing={10}>
                 <Stack
                   direction={{ base: 'column', sm: 'row' }}
@@ -102,15 +108,20 @@ import NavBar from './NavBar';
                   _hover={{
                     bg: 'blue.500',
                   }}>
-                  SAVE 
-                
+                  UPLOAD 
                 </Button>
-          
               </Stack>
             </Stack>
           </Box>
         </Stack>
       </Flex>
+      {/* {
+        image.map((e)=>(
+          <Image src={e}></Image>
+        ))
+      }
+      */}
+      
     </Box>
     </>
     );
